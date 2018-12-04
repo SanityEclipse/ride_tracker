@@ -1,16 +1,16 @@
 package com.pluralsight.repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.pluralsight.model.Ride;
+import com.pluralsight.repository.util.RideRowMapper;
 
 @Repository("rideRepository")
 public class RideRepositoryImpl implements RideRepository {
@@ -46,11 +46,9 @@ public class RideRepositoryImpl implements RideRepository {
 	
 	@Override
 	public List<Ride> getRides() {
-		Ride ride = new Ride();
-		ride.setName("Corner Canyon");
-		ride.setDuration(120);
-		List <Ride> rides = new ArrayList<>();
-		rides.add(ride);
+		
+		List<Ride> rides = jdbcTemplate.query("select * from ride", new RideRowMapper());
+		
 		return rides;
 	}
 	
